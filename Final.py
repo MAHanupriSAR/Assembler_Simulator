@@ -151,7 +151,7 @@ def i_type_instruction(line):
                     imm = binary_representation(imm, 12)
 
                 with open("binary_file.txt", "a") as f:
-                    f.write(i_opcode[instruction] + " " + des + " " + i_funct3[instruction] + " " + src + " " + imm + "\n")
+                    f.write(imm + " " + src + " " + i_funct3[instruction] + " " + des + " " + i_opcode[instruction] + "\n")
             else:
                 flag_of_error = True
                 with open("binary_file.txt", "w") as f:
@@ -173,7 +173,7 @@ def i_type_instruction(line):
                     imm = binary_representation(imm, 12)
 
                 with open("binary_file.txt", "a") as f:
-                    f.write(i_opcode[instruction] + " " + des + " " + i_funct3[instruction] + " " + src + " " + imm + "\n")
+                    f.write(imm + " " + src + " " + i_funct3[instruction] + " " + des + " " + i_opcode[instruction] + "\n")
             else:
                 flag_of_error = True
                 with open("binary_file.txt", "w") as f:
