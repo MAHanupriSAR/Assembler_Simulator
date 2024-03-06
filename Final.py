@@ -132,22 +132,51 @@ def i_type_instruction(line):
     global line_number, flag_of_error
     l1 = line.split(" ")
     if (len(l1)==2) and (l1[0] in i_opcode.keys()):
-        l2=l1[1].split(",")
-        l1.pop()
-        l1.append(l2)
-        if(len(l1[1])==3 and l1[1][0] in registers.keys() and l1[1][1] in registers.keys() and convertible(l1[1][2], 12)):
-            instruction = l1[0]
-            des = reg_binary_calc(l1[1][0])
-            src = reg_binary_calc(l1[1][1])
-            imm = int(l1[1][2])
+        if(l1[0]=="lw" and "(" in l1[1] and ")" in l1[1]):
+            to_be_list = l1[1]
+            to_be_list = to_be_list.replace("(", ",")
+            to_be_list = to_be_list.replace(")", "")
+            l2 = to_be_list.split(",")
+            l1.pop()
+            l1.append(l2)
+            if(len(l1[1])==3 and l1[1][0] in registers.keys() and convertible(l1[1][1], 12) and l1[1][2] in registers.keys()):
+                instruction = l1[0]
+                des = reg_binary_calc(l1[1][0])
+                src = reg_binary_calc(l1[1][2])
+                imm = int(l1[1][1])
+                if(imm<0):
+                    imm = binary_rep_compliment(imm, 12)
+                else:
+                    imm = binary_representation(imm, 12)
 
-            if(imm<0):
-                imm = binary_rep_compliment(imm, 12)
+                with open("binary_file.txt", "a") as f:
+                    f.write(i_opcode[instruction] + " " + des + " " + i_funct3[instruction] + " " + src + " " + imm + "\n")
             else:
-                imm = binary_representation(imm, 12)
+                flag_of_error = True
+                with open("binary_file.txt", "w") as f:
+                    f.write(f"Error generated at line {str(line_number)}")
 
-            with open("binary_file.txt", "a") as f:
-                f.write(i_opcode[instruction] + " " + des + " " + i_funct3[instruction] + " " + src + " " + imm + "\n")
+        elif(l1[0]=="addi" or l1[0]=="sltiu" or l1[0] == "jalr"):
+            l2=l1[1].split(",")
+            l1.pop()
+            l1.append(l2)
+            if(len(l1[1])==3 and l1[1][0] in registers.keys() and l1[1][1] in registers.keys() and convertible(l1[1][2], 12)):
+                instruction = l1[0]
+                des = reg_binary_calc(l1[1][0])
+                src = reg_binary_calc(l1[1][1])
+                imm = int(l1[1][2])
+
+                if(imm<0):
+                    imm = binary_rep_compliment(imm, 12)
+                else:
+                    imm = binary_representation(imm, 12)
+
+                with open("binary_file.txt", "a") as f:
+                    f.write(i_opcode[instruction] + " " + des + " " + i_funct3[instruction] + " " + src + " " + imm + "\n")
+            else:
+                flag_of_error = True
+                with open("binary_file.txt", "w") as f:
+                    f.write(f"Error generated at line {str(line_number)}")
         else:
             flag_of_error = True
             with open("binary_file.txt", "w") as f:
@@ -156,6 +185,7 @@ def i_type_instruction(line):
         flag_of_error = True
         with open("binary_file.txt", "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
+
 
 def s_type_instruction(line):
     
