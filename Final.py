@@ -200,6 +200,7 @@ def s_type_instruction(line):
     global line_number, flag_of_error
     pattern = r'^sw [a-zA-Z0-9]+,[-]?\d+\([a-zA-Z0-9]+\)$'
     if(not re.match(pattern, line)):
+        flag_of_error = True
         with open("binary_file.txt", "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
         return
@@ -226,11 +227,14 @@ def s_type_instruction(line):
             f.write(f"Error generated at line {str(line_number)}")
 
 def b_type_instruction(line):
+    global line_number, flag_of_error
     pattern = r'^(beq|bne|blt|bge|bltu|bgeu) [a-zA-Z0-9]+,[a-zA-Z0-9]+,[-]?\d+$'
     if(not re.match(pattern, line)):
+        flag_of_error = True
         with open("binary_file.txt", "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
         return
+    
     inst_funct3 = {"beq":"000", "bne":"001", "blt":"100", "bge":"101", "bltu":"110", "bgeu":"111"}
     line = line.replace(" ", ",")
     split_line = line.split(",")
@@ -274,7 +278,7 @@ with open("temp.txt") as f:
             s_type_instruction(curr_line)
 
         elif(curr_line.split()[0] in b_type):
-            b_type_instruction()
+            b_type_instruction(curr_line)
 
         elif(curr_line.split()[0] in u_type):
             u_type_instruction()
