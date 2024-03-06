@@ -285,7 +285,59 @@ def u_type_instruction(line):
         return
 
 def j_type_instruction():
-    pass
+    global line_number, flag_of_error
+    pattern = r'^jal [a-zA-Z0-9]+,[-]?\d+$'
+    opcode="1101111"
+    line1=line.split()
+    if(not re.match(pattern, line)):
+        flag_of_error=True
+        with open("binary_file.txt", "w") as f:
+            f.write(f"Error generated at line {str(line_number)}") 
+    else:
+
+        if(len(line1)==2 and len(line1[1])==2 and line1[0]=='jal'):
+                line2=line1[1].split(",")
+                if(line2[0] in registers.keys() and convertible(line2[1],20)):
+                    reg=str(reg_binary_calc(line2[0]))
+                    imm=str(imm_binary_calc(line2[1],20))
+                    imm_1=''
+                    imm_3=''
+                    for index,i in enumerate(imm,start=0):
+                        while(index>11 and index<20):
+                            imm_1+=i
+                        while(index>0 and index<11):
+                            imm_3+=i
+                            
+                    imm_2=imm[11]
+                    imm_4=imm[20]
+                    imm_mod=imm_1+imm_2+imm_3+imm_4
+                    with open("binary_file.txt", "w") as f:
+                        f.write(opcode+' '+reg+' '+imm_mod+'\n')
+                elif(convertible(line[0],20) and line[1] in registers.keys()):
+                    reg=str(reg_binary_calc(line2[1]))
+                    imm=str(imm_binary_calc(line2[0],20))
+                    imm_1=''
+                    imm_3=''
+                    for index,i in enumerate(imm,start=0):
+                        while(index>11 and index<20):
+                            imm_1+=i
+                        while(index>0 and index<11):
+                            imm_3+=i
+                            
+                    imm_2=imm[11]
+                    imm_4=imm[20]
+                    imm_mod=imm_1+imm_2+imm_3+imm_4
+                    with open("binary_file.txt", "w") as f:
+                        f.write(opcode+' '+reg+' '+imm_mod+'\n')
+                else:
+                    flag_of_error=True
+                    with open("binary_file.txt", "w") as f:
+                        f.write(f"Error generated at line {str(line_number)}")
+        else:
+                flag_of_error=True
+                with open('binary_file.txt','w') as f:
+                    f.write(f"Error generated at line {str(line_number)}")
+                    
 
 with open("temp.txt") as f:
     for line in f:
