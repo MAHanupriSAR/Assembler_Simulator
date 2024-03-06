@@ -73,6 +73,7 @@ j_type = ["jal"]
 
 r_function3={"add":"000","sub":"000","slt":"010","sltu":"011","xor":"100","sll":"001","srl":"101","or":"110","and":"111"}
 i_opcode = {"lw":"0000011", "addi":"0010011", "sltiu":"0010011", "jalr":"1100111"}
+u_opcode = {"auipc":"0010111", "lui":"0110111"}
 i_funct3 = {"lw":"010", "addi":"000", "sltiu":"011", "jalr":"000"}
 
 registers = {
