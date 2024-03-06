@@ -1,3 +1,5 @@
+import re
+
 line_number = 0
 flag_of_error = False
 
@@ -194,7 +196,8 @@ def i_type_instruction(line):
 
 def s_type_instruction(line):
     global line_number, flag_of_error
-    if(not("(" in line and ")" in line)):
+    pattern = r'^sw [a-zA-Z0-9]+,[-]?\d+\([a-zA-Z0-9]+\)$'
+    if(not re.match(pattern, line)):
         with open("binary_file.txt", "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
         return
