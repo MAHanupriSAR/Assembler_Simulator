@@ -234,7 +234,11 @@ with open("temp.txt") as f:
             break
         line_number+=1
         curr_line = line.strip()
-        if(curr_line.split()[0] in r_type):
+
+        if(line=="\n" or line.isspace()):
+            continue
+        
+        elif(curr_line.split()[0] in r_type):
             r_type_instruction(curr_line)   
             
         elif(curr_line.split()[0] in i_type):
