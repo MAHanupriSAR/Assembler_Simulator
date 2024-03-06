@@ -113,8 +113,8 @@ def r_type_instruction(line):
     data1 = line.split(" ")
     data2 = data1[1].split(",")
     if(len(data1)==2 and len(data2)==3 and data1[0] in r_function3.keys() and data2[0] in registers.keys() and data2[1] in registers.keys() and data2[2] in registers.keys()):
-        binary:["0000000", str(reg_binary_calc(data2[2])), str(reg_binary_calc(data2[1])), str(r_function3[data1[0]]), str(reg_binary_calc(data2[0])), "0110011"]
-        binary1:["0100000", str(reg_binary_calc(data2[2])), str(reg_binary_calc(data2[1])), str(r_function3[data1[0]]), str(reg_binary_calc(data2[0])), "0110011"]
+        binary=["0000000", str(reg_binary_calc(data2[2])), str(reg_binary_calc(data2[1])), str(r_function3[data1[0]]), str(reg_binary_calc(data2[0])), "0110011"]
+        binary1=["0100000", str(reg_binary_calc(data2[2])), str(reg_binary_calc(data2[1])), str(r_function3[data1[0]]), str(reg_binary_calc(data2[0])), "0110011"]
 
         with open("binary_file.txt", "a") as f:
             if data1[0] == "sub":
