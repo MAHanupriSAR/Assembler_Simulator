@@ -143,6 +143,7 @@ def i_type_instruction(line):
     if (len(l1)==2) and (l1[0] == "lw"):
         pattern = r'^lw [a-zA-Z0-9]+,[-]?\d+\([a-zA-Z0-9]+\)$'
         if(not re.match(pattern, line)):
+            flag_of_error = True
             with open("binary_file.txt", "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
             return
