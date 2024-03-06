@@ -261,5 +261,3 @@ with open("temp.txt") as f:
             with open("binary_file.txt", "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
 
-
-# hahhahaha
