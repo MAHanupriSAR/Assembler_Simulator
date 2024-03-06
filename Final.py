@@ -6,12 +6,17 @@ def imm_binary_calc(imm):
         return False
     else:
         binary = ""
-        org_imm = abs(imm)
-
-        while org_imm > 0:
-            rem = str(org_imm % 2)
-            binary = rem + binary
-            org_imm //= 2
+        if(imm>=0):
+            while imm > 0:
+                rem = str(imm % 2)
+                binary = rem + binary
+                imm //= 2
+        else:
+            imm = abs(int(pow(2,12)-1) - abs(imm) + 1)
+            while imm > 0:
+                rem = str(imm % 2)
+                binary = rem + binary
+                imm //= 2
 
         if len(binary) < 12:
             if imm < 0:
@@ -187,8 +192,12 @@ def i_type_instruction(line):
         with open("binary_file.txt", "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
 
-
 def s_type_instruction(line):
+    global line_number, flag_of_error
+    if(not("(" in line and ")" in line)):
+        with open("binary_file.txt", "w") as f:
+            f.write(f"Error generated at line {str(line_number)}")
+        return
     
     line = line.replace("(",",")
     line = line.replace(")","")
@@ -199,14 +208,15 @@ def s_type_instruction(line):
     inst = split_line[0]
     dest_reg = split_line[1]
     reg2 = split_line[3]
-        
-    if((inst in s_type) and reg_binary_calc(dest_reg) and convertible(split_line[2], 12) and imm_binary_calc(imm) and reg_binary_calc(reg2)):
+
+    if((inst in s_type) and reg_binary_calc(dest_reg) and convertible(split_line[2], 12) and reg_binary_calc(reg2)):
         imm = int(split_line[2])
         imm = imm_binary_calc(imm)
+        print(imm)
+        to_write= imm[0:7] + " " + reg_binary_calc(dest_reg) + " " + reg_binary_calc(reg2) + " " + "010" + " " + imm[7:12] + " " + "0100011"
         with open("binary_file.txt","a") as f:
-            f.write("0100011 " + imm[7:12] + " 010 " + reg_binary_calc(reg2) + " " + reg_binary_calc(dest_reg) + " " + imm[0:7] + "\n")
+            f.write(to_write)
     else:
-        global line_number, flag_of_error
         flag_of_error = True
         with open("binary_file.txt", "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
