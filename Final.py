@@ -253,8 +253,36 @@ def b_type_instruction(line):
         with open("binary_file.txt", "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
             
-def u_type_instruction():
-    pass
+def u_type_instruction(line):
+    global line_number, flag_of_error
+    pattern = r'^(auipc|lui) [a-zA-Z0-9]+,?[-]?\d+$'
+    if(not re.match(pattern, line)):
+            flag_of_error = True
+            with open("binary_file.txt", "w") as f:
+                f.write(f"Error generated at line {str(line_number)}")
+            return
+    line = line.replace(" ", ",")
+    l1 = line.split(",")
+    if(len(l1)==3 and l1[0] in u_opcode.keys() and l1[1] in registers.keys() and convertible(l1[2], 32)):
+        instruction = u_opcode[l1[0]]
+        des = reg_binary_calc(l1[1])
+        imm = int(l1[2])
+
+        if(imm<0):
+            imm = str(binary_rep_compliment(imm, 32))
+        else:
+            imm = str(binary_representation(imm, 32))
+        
+        imm_to_be_stored = imm[0:20]
+
+        with open("binary_file.txt", "a") as f:
+            f.write(f"{imm_to_be_stored} {des} {instruction}\n")
+    else:
+        flag_of_error = True
+        with open("binary_file.txt", "w") as f:
+            f.write(f"Error generated at line {str(line_number)}")
+        return
+
 def j_type_instruction():
     pass
 
@@ -281,7 +309,7 @@ with open("temp.txt") as f:
             b_type_instruction(curr_line)
 
         elif(curr_line.split()[0] in u_type):
-            u_type_instruction()
+            u_type_instruction(curr_line)
 
         elif(curr_line.split()[0] in j_type):
             j_type_instruction()
