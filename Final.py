@@ -3,8 +3,8 @@ import re
 line_number = 0
 flag_of_error = False
 
-def imm_binary_calc(imm):
-    if imm < (-2048) or imm > 2047:
+def imm_binary_calc(imm, max_bits):
+    if imm < (-(2**(max_bits-1))) or imm > ((2**(max_bits-1))-1):
         return False
     else:
         binary = ""
@@ -20,13 +20,14 @@ def imm_binary_calc(imm):
                 binary = rem + binary
                 imm //= 2
 
-        if len(binary) < 12:
+        if len(binary) < max_bits:
             if imm < 0:
-                binary = "1" * (12 - len(binary)) + binary
+                binary = "1" * (max_bits - len(binary)) + binary
             else:
-                binary = "0" * (12 - len(binary)) + binary
+                binary = "0" * (max_bits - len(binary)) + binary
 
         return binary
+
 
 def reg_binary_calc(register_name):
     if register_name in registers:
@@ -214,9 +215,8 @@ def s_type_instruction(line):
 
     if((inst in s_type) and reg_binary_calc(dest_reg) and convertible(split_line[2], 12) and reg_binary_calc(reg2)):
         imm = int(split_line[2])
-        imm = imm_binary_calc(imm)
-        print(imm)
-        to_write= imm[0:7] + " " + reg_binary_calc(dest_reg) + " " + reg_binary_calc(reg2) + " " + "010" + " " + imm[7:12] + " " + "0100011"
+        imm = imm_binary_calc(imm, 12)
+        to_write= imm[0:7] + " " + reg_binary_calc(dest_reg) + " " + reg_binary_calc(reg2) + " " + "010" + " " + imm[7:12] + " " + "0100011" + "\n"
         with open("binary_file.txt","a") as f:
             f.write(to_write)
     else:
@@ -224,8 +224,30 @@ def s_type_instruction(line):
         with open("binary_file.txt", "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
 
-def b_type_instruction():
-    pass
+def b_type_instruction(line):
+    pattern = r'^(beq|bne|blt|bge|bltu|bgeu) [a-zA-Z0-9]+,[a-zA-Z0-9]+,[-]?\d+$'
+    if(not re.match(pattern, line)):
+        with open("binary_file.txt", "w") as f:
+            f.write(f"Error generated at line {str(line_number)}")
+        return
+    inst_funct3 = {"beq":"000", "bne":"001", "blt":"100", "bge":"101", "bltu":"110", "bgeu":"111"}
+    line = line.replace(" ", ",")
+    split_line = line.split(",")
+    inst = split_line[0]
+    rs1 = split_line[1]
+    rs2 = split_line[2]
+
+    if((inst in b_type) and reg_binary_calc(rs1) and reg_binary_calc(rs2) and convertible(split_line[3], 16)):
+        imm = int(split_line[3])
+        imm = imm_binary_calc(imm, 16)
+        to_write = imm[3]+imm[5:11] + " " + reg_binary_calc(rs2) + " " + reg_binary_calc(rs1) + " " + inst_funct3[inst] + " " + imm[11:15]+imm[4] + " " + "1100011" + "\n"
+        with open("binary_file.txt","a") as f:
+            f.write(to_write)
+    else:
+        flag_of_error = True
+        with open("binary_file.txt", "w") as f:
+            f.write(f"Error generated at line {str(line_number)}")
+            
 def u_type_instruction():
     pass
 def j_type_instruction():
