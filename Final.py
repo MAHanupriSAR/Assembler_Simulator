@@ -257,10 +257,10 @@ def u_type_instruction(line):
     global line_number, flag_of_error
     pattern = r'^(auipc|lui) [a-zA-Z0-9]+,?[-]?\d+$'
     if(not re.match(pattern, line)):
-            flag_of_error = True
-            with open("binary_file.txt", "w") as f:
-                f.write(f"Error generated at line {str(line_number)}")
-            return
+        flag_of_error = True
+        with open("binary_file.txt", "w") as f:
+            f.write(f"Error generated at line {str(line_number)}")
+        return
     line = line.replace(" ", ",")
     l1 = line.split(",")
     if(len(l1)==3 and l1[0] in u_opcode.keys() and l1[1] in registers.keys() and convertible(l1[2], 32)):
