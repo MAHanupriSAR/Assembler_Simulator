@@ -340,7 +340,7 @@ def j_type_instruction():
                 with open('binary_file.txt','w') as f:
                     f.write(f"Error generated at line {str(line_number)}")
 
-main_list = []                 
+main_list = [0,0]                 
 halt = "beq zero,zero,0x00000000"
 with open("temp.txt") as f:
     for line in f:
@@ -353,24 +353,31 @@ with open("temp.txt") as f:
             continue
 
         elif (curr_line==halt):
-            main_list.append(line_number)
+            main_list[1] = line_number
+            main_list[0] = line_number
         
         elif(curr_line.split()[0] in r_type):
+            main_list[1] = line_number
             r_type_instruction(curr_line)   
             
         elif(curr_line.split()[0] in i_type):
+            main_list[1] = line_number
             i_type_instruction(curr_line)
         
         elif(curr_line.split()[0] in s_type):
+            main_list[1] = line_number
             s_type_instruction(curr_line)
 
         elif(curr_line.split()[0] in b_type):
+            main_list[1] = line_number
             b_type_instruction(curr_line)
 
         elif(curr_line.split()[0] in u_type):
+            main_list[1] = line_number
             u_type_instruction(curr_line)
 
         elif(curr_line.split()[0] in j_type):
+            main_list[1] = line_number
             j_type_instruction(curr_line)
         
         else:
@@ -378,12 +385,11 @@ with open("temp.txt") as f:
             with open("binary_file.txt", "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
 
-main_list.append(line_number)
 
-if(len(main_list)==2):
+if(main_list[0]==0):
+    with open("binary_file.txt", "w") as f:
+        f.write("Virtual halt absent")
+elif(len(main_list)==2):
     if(main_list[0] != main_list[1]):
         with open("binary_file.txt", "w") as f:
             f.write(f"Error generated as virtual halt is on line {main_list[0]} and last instruction is on line {main_list[1]}")
-else:
-    with open("binary_file.txt", "w") as f:
-        f.write("Virtual halt absent")
