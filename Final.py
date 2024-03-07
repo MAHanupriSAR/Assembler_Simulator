@@ -316,7 +316,7 @@ def j_type_instruction(line):
                     imm_2=str(imm[10])
                     imm_4=str(imm[19])
                     imm_mod=imm_4+imm_3+imm_2+imm_1
-                    with open("binary_file.txt", "w") as f:
+                    with open("binary_file.txt", "a") as f:
                         f.write(opcode+' '+reg+' '+imm_mod+'\n')
                 else:
                     flag_of_error=True
