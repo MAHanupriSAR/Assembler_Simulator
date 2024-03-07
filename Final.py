@@ -14,7 +14,7 @@ def imm_binary_calc(imm, max_bits):
                 binary = rem + binary
                 imm //= 2
         else:
-            temp = abs(int(pow(2,12)-1) - abs(imm) + 1)
+            temp = abs(int(pow(2,max_bits)-1) - abs(imm) + 1)
             while temp > 0:
                 rem = str(temp % 2)
                 binary = rem + binary
