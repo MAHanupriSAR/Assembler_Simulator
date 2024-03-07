@@ -286,7 +286,7 @@ def u_type_instruction(line):
             f.write(f"Error generated at line {str(line_number)}")
         return
 
-def j_type_instruction():
+def j_type_instruction(line):
     global line_number, flag_of_error
     pattern = r'^jal [a-zA-Z0-9]+,[-]?\d+$'
     opcode="1101111"
