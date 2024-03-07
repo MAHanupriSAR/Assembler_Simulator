@@ -339,8 +339,9 @@ def j_type_instruction():
                 flag_of_error=True
                 with open('binary_file.txt','w') as f:
                     f.write(f"Error generated at line {str(line_number)}")
-                    
 
+main_list = []                 
+halt = "beq zero,zero,0x00000000"
 with open("temp.txt") as f:
     for line in f:
         if(flag_of_error==True):
@@ -350,6 +351,9 @@ with open("temp.txt") as f:
 
         if(line=="\n" or line.isspace()):
             continue
+
+        elif (curr_line==halt):
+            main_list.append(line_number)
         
         elif(curr_line.split()[0] in r_type):
             r_type_instruction(curr_line)   
@@ -367,9 +371,19 @@ with open("temp.txt") as f:
             u_type_instruction(curr_line)
 
         elif(curr_line.split()[0] in j_type):
-            j_type_instruction()
+            j_type_instruction(curr_line)
         
         else:
             flag_of_error = True
             with open("binary_file.txt", "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
+
+main_list.append(line_number)
+
+if(len(main_list)==2):
+    if(main_list[0] != main_list[1]):
+        with open("binary_file.txt", "w") as f:
+            f.write(f"Error generated as virtual halt is on line {main_list[0]} and last instruction is on line {main_list[1]}")
+else:
+    with open("binary_file.txt", "w") as f:
+        f.write("Virtual halt absent")
