@@ -373,10 +373,11 @@ with open("temp.txt") as f:
                 f.write(f"Error generated at line {str(line_number)}")
 
 
-if(main_list[0]==0):
-    with open("binary_file.txt", "w") as f:
-        f.write("Virtual halt absent")
-elif(len(main_list)==2):
-    if(main_list[0] != main_list[1]):
+if(flag_of_error==False):
+    if(main_list[0]==0):
         with open("binary_file.txt", "w") as f:
-            f.write(f"Error generated as virtual halt is on line {main_list[0]} and last instruction is on line {main_list[1]}")
+            f.write("Virtual halt absent")
+    elif(len(main_list)==2):
+        if(main_list[0] != main_list[1]):
+            with open("binary_file.txt", "w") as f:
+                f.write(f"Error generated as virtual halt is on line {main_list[0]} and last instruction is on line {main_list[1]}")
