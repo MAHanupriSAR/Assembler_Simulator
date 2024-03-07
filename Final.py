@@ -25,7 +25,6 @@ def imm_binary_calc(imm, max_bits):
                 binary = "1" * (max_bits - len(binary)) + binary
             else:
                 binary = "0" * (max_bits - len(binary)) + binary
-
         return binary
 
 
@@ -33,7 +32,10 @@ def reg_binary_calc(register_name):
     if register_name in registers:
         return list(registers[register_name].values())[0]
     else:
-        return False
+        for register, values in registers.items():
+            if register_name in values:
+                return values[register_name] 
+    return False
     
 def binary_representation(num, i):
     num = abs(num)
