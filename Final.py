@@ -296,17 +296,12 @@ def j_type_instruction(line):
         with open("binary_file.txt", "w") as f:
             f.write(f"Error generated at line {str(line_number)}") 
     else:
-
         if(len(line1)==2 and line1[0]=='jal'):
                 line2=line1[1].split(",")
-                print(line2)
                 if(line2[0] in registers.keys() and convertible((line2[1]),20)):
                     reg=str(reg_binary_calc(line2[0]))
-                    print(reg)
                     imm=str(imm_binary_calc(int(line2[1]),20))
-                    print(imm)
                     imm=imm[::-1]
-                    print(imm)
                     imm_1=''
                     imm_3=''
                     for index,i in enumerate(imm,start=0):
@@ -320,9 +315,7 @@ def j_type_instruction(line):
                     imm_3=imm_3[::-1]    
                     imm_2=str(imm[10])
                     imm_4=str(imm[19])
-                    print(imm_2)
                     imm_mod=imm_4+imm_3+imm_2+imm_1
-                    print(imm_mod)
                     with open("binary_file.txt", "w") as f:
                         f.write(opcode+' '+reg+' '+imm_mod+'\n')
                 else:
