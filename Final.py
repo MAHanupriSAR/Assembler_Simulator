@@ -126,12 +126,10 @@ def r_type_instruction(line):
             if data1[0] == "sub":
                 for i in binary1:
                     f.write(i)
-                    f.write(" ")
                 f.write("\n")
             else:
                 for i in binary:
                     f.write(i)
-                    f.write(" ")
                 f.write("\n")
     else:
         global line_number, flag_of_error
@@ -167,7 +165,7 @@ def i_type_instruction(line):
                 imm = binary_representation(imm, 12)
 
             with open("binary_file.txt", "a") as f:
-                f.write(imm + " " + src + " " + i_funct3[instruction] + " " + des + " " + i_opcode[instruction] + "\n")
+                f.write(imm + src + i_funct3[instruction] + des + i_opcode[instruction] + "\n")
         else:
             flag_of_error = True
             with open("binary_file.txt", "w") as f:
@@ -189,7 +187,7 @@ def i_type_instruction(line):
                 imm = binary_representation(imm, 12)
 
             with open("binary_file.txt", "a") as f:
-                f.write(imm + " " + src + " " + i_funct3[instruction] + " " + des + " " + i_opcode[instruction] + "\n")
+                f.write(imm + src + i_funct3[instruction] + des + i_opcode[instruction] + "\n")
         else:
             flag_of_error = True
             with open("binary_file.txt", "w") as f:
@@ -221,7 +219,7 @@ def s_type_instruction(line):
     if((inst in s_type) and reg_binary_calc(dest_reg) and convertible(split_line[2], 12) and reg_binary_calc(reg2)):
         imm = int(split_line[2])
         imm = imm_binary_calc(imm, 12)
-        to_write= imm[0:7] + " " + reg_binary_calc(dest_reg) + " " + reg_binary_calc(reg2) + " " + "010" + " " + imm[7:12] + " " + "0100011" + "\n"
+        to_write= imm[0:7] + reg_binary_calc(dest_reg) + reg_binary_calc(reg2) + "010" + imm[7:12] + "0100011" + "\n"
         with open("binary_file.txt","a") as f:
             f.write(to_write)
     else:
@@ -248,7 +246,7 @@ def b_type_instruction(line):
     if((inst in b_type) and reg_binary_calc(rs1) and reg_binary_calc(rs2) and convertible(split_line[3], 16)):
         imm = int(split_line[3])
         imm = imm_binary_calc(imm, 16)
-        to_write = imm[3]+imm[5:11] + " " + reg_binary_calc(rs2) + " " + reg_binary_calc(rs1) + " " + inst_funct3[inst] + " " + imm[11:15]+imm[4] + " " + "1100011" + "\n"
+        to_write = imm[3]+imm[5:11] + reg_binary_calc(rs2) + reg_binary_calc(rs1) + inst_funct3[inst] + imm[11:15]+imm[4] + "1100011" + "\n"
         with open("binary_file.txt","a") as f:
             f.write(to_write)
     else:
@@ -279,7 +277,7 @@ def u_type_instruction(line):
         imm_to_be_stored = imm[0:20]
 
         with open("binary_file.txt", "a") as f:
-            f.write(f"{imm_to_be_stored} {des} {instruction}\n")
+            f.write(f"{imm_to_be_stored}{des}{instruction}\n")
     else:
         flag_of_error = True
         with open("binary_file.txt", "w") as f:
@@ -317,7 +315,7 @@ def j_type_instruction(line):
                     imm_4=str(imm[19])
                     imm_mod=imm_4+imm_3+imm_2+imm_1
                     with open("binary_file.txt", "a") as f:
-                        f.write(f"{imm_mod} {reg} {opcode}\n")
+                        f.write(f"{imm_mod}{reg}{opcode}\n")
                 else:
                     flag_of_error=True
                     with open("binary_file.txt", "w") as f:
@@ -327,8 +325,8 @@ def j_type_instruction(line):
                 with open('binary_file.txt','w') as f:
                     f.write(f"Error generated at line {str(line_number)}")
 main_list = [0,0]                 
-halt = "beq zero,zero,0x00000000"
-with open("temp.txt") as f:
+halt = "beq zero,zero,0"
+with open("test2.txt") as f:
     for line in f:
         if(flag_of_error==True):
             break
@@ -371,6 +369,9 @@ with open("temp.txt") as f:
             with open("binary_file.txt", "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
 
+if(flag_of_error==False):
+    with open("binary_file.txt", "a") as f:
+        f.write(f"00000000000000000000000001100011")
 
 if(flag_of_error==False):
     if(main_list[0]==0):
