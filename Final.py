@@ -317,7 +317,7 @@ def j_type_instruction(line):
                     imm_4=str(imm[19])
                     imm_mod=imm_4+imm_3+imm_2+imm_1
                     with open("binary_file.txt", "a") as f:
-                        f.write(opcode+' '+reg+' '+imm_mod+'\n')
+                        f.write(f"{imm_mod} {reg} {opcode}\n")
                 else:
                     flag_of_error=True
                     with open("binary_file.txt", "w") as f:
@@ -326,7 +326,6 @@ def j_type_instruction(line):
                 flag_of_error=True
                 with open('binary_file.txt','w') as f:
                     f.write(f"Error generated at line {str(line_number)}")
-
 main_list = [0,0]                 
 halt = "beq zero,zero,0x00000000"
 with open("temp.txt") as f:
