@@ -29,6 +29,12 @@ def imm_binary_calc(imm, max_bits):
                 binary = "0" * (max_bits - len(binary)) + binary
         return binary
 
+def is_continuous_alphabets(substring):
+    pattern = r'^[a-zA-Z]+$'
+    if re.match(pattern, substring):
+        return True
+    else:
+        return False
 
 def reg_binary_calc(register_name):
     if register_name in registers:
@@ -137,7 +143,8 @@ def r_type_instruction(line):
         global line_number, flag_of_error
         flag_of_error = True
         with open(towrite, "w") as f:
-                f.write(f"Error generated at line {str(line_number)}")
+                f.write("")
+        print(f"Error generated at line {str(line_number)}")
         
 
 def i_type_instruction(line):
@@ -148,7 +155,8 @@ def i_type_instruction(line):
         if(not re.match(pattern, line)):
             flag_of_error = True
             with open(towrite, "w") as f:
-                f.write(f"Error generated at line {str(line_number)}")
+                f.write("")
+            print(f"Error generated at line {str(line_number)}")
             return
         to_be_list = l1[1]
         to_be_list = to_be_list.replace("(", ",")
@@ -171,7 +179,8 @@ def i_type_instruction(line):
         else:
             flag_of_error = True
             with open(towrite, "w") as f:
-                f.write(f"Error generated at line {str(line_number)}")
+                f.write("")
+            print(f"Error generated at line {str(line_number)}")
 
     elif((len(l1)==2) and (l1[0]=="addi" or l1[0]=="sltiu" or l1[0] == "jalr")):
         l2=l1[1].split(",")
@@ -193,11 +202,14 @@ def i_type_instruction(line):
         else:
             flag_of_error = True
             with open(towrite, "w") as f:
-                f.write(f"Error generated at line {str(line_number)}")
+                f.write("")
+            print(f"Error generated at line {str(line_number)}")
     else:
         flag_of_error = True
         with open(towrite, "w") as f:
-            f.write(f"Error generated at line {str(line_number)}")
+            f.write("")
+        print(f"Error generated at line {str(line_number)}")
+        
 
 def s_type_instruction(line):
     global line_number, flag_of_error
@@ -205,7 +217,8 @@ def s_type_instruction(line):
     if(not re.match(pattern, line)):
         flag_of_error = True
         with open(towrite, "w") as f:
-            f.write(f"Error generated at line {str(line_number)}")
+            f.write("")
+        print(f"Error generated at line {str(line_number)}")
         return
     
     line = line.replace("(",",")
@@ -227,7 +240,8 @@ def s_type_instruction(line):
     else:
         flag_of_error = True
         with open(towrite, "w") as f:
-            f.write(f"Error generated at line {str(line_number)}")
+            f.write("")
+        print(f"Error generated at line {str(line_number)}")
 
 def b_type_instruction(line):
     global line_number, flag_of_error
@@ -235,7 +249,8 @@ def b_type_instruction(line):
     if(not re.match(pattern, line)):
         flag_of_error = True
         with open(towrite, "w") as f:
-            f.write(f"Error generated at line {str(line_number)}")
+            f.write("")
+        print(f"Error generated at line {str(line_number)}")
         return
     
     inst_funct3 = {"beq":"000", "bne":"001", "blt":"100", "bge":"101", "bltu":"110", "bgeu":"111"}
@@ -254,7 +269,8 @@ def b_type_instruction(line):
     else:
         flag_of_error = True
         with open(towrite, "w") as f:
-            f.write(f"Error generated at line {str(line_number)}")
+            f.write("")
+        print(f"Error generated at line {str(line_number)}")
             
 def u_type_instruction(line):
     global line_number, flag_of_error
@@ -262,7 +278,8 @@ def u_type_instruction(line):
     if(not re.match(pattern, line)):
         flag_of_error = True
         with open(towrite, "w") as f:
-            f.write(f"Error generated at line {str(line_number)}")
+            f.write("")
+        print(f"Error generated at line {str(line_number)}")
         return
     line = line.replace(" ", ",")
     l1 = line.split(",")
@@ -283,7 +300,8 @@ def u_type_instruction(line):
     else:
         flag_of_error = True
         with open(towrite, "w") as f:
-            f.write(f"Error generated at line {str(line_number)}")
+            f.write("")
+        print(f"Error generated at line {str(line_number)}")
         return
 
 def j_type_instruction(line):
@@ -294,7 +312,8 @@ def j_type_instruction(line):
     if(not re.match(pattern, line)):
         flag_of_error=True
         with open(towrite, "w") as f:
-            f.write(f"Error generated at line {str(line_number)}") 
+            f.write("") 
+        print(f"Error generated at line {str(line_number)}")
     else:
         if(len(line1)==2 and line1[0]=='jal'):
                 line2=line1[1].split(",")
@@ -313,19 +332,21 @@ def j_type_instruction(line):
                             
                     imm_1=imm_1[::-1]  
                     imm_3=imm_3[::-1]    
-                    imm_2=str(imm[11])
-                    imm_4=str(imm[20])
+                    imm_2=str(imm[10])
+                    imm_4=str(imm[19])
                     imm_mod=imm_4+imm_3+imm_2+imm_1
                     with open(towrite, "a") as f:
                         f.write(f"{imm_mod}{reg}{opcode}\n")
                 else:
                     flag_of_error=True
                     with open(towrite, "w") as f:
-                        f.write(f"Error generated at line {str(line_number)}")
+                        f.write("")
+                    print(f"Error generated at line {str(line_number)}")
         else:
                 flag_of_error=True
                 with open('binary_file.txt','w') as f:
-                    f.write(f"Error generated at line {str(line_number)}")
+                    f.write("")
+                print(f"Error generated at line {str(line_number)}")
 
 line_no = 0
 label_list = []
@@ -354,6 +375,12 @@ with open(to_open) as f:
     for line in f:
         line_num+=1
         if(char in line):
+            if(not (is_continuous_alphabets(line[:line.index(char)]))):
+                with open(towrite, "w") as fh:
+                    fh.write("")
+                print(f"Error generated at line {str(line_num)}")
+                flag_of_error=True
+                break
             line = line[line.index(char)+1:]
         for elements in label_list:
             la = (list(elements.keys()))[0]
@@ -408,7 +435,8 @@ with open(to_open) as f:
         else:
             flag_of_error = True
             with open(towrite, "w") as f:
-                f.write(f"Error generated at line {str(line_number)}")
+                f.write("")
+            print(f"Error generated at line {str(line_number)}")
 
 if(flag_of_error==False):
     with open(towrite, "a") as f:
@@ -417,11 +445,13 @@ if(flag_of_error==False):
 if(flag_of_error==False):
     if(main_list[0]==0):
         with open(towrite, "w") as f:
-            f.write("Virtual halt absent")
+            f.write("")
+        print("Virtual halt absent")
     elif(len(main_list)==2):
         if(main_list[0] != main_list[1]):
             with open(towrite, "w") as f:
-                f.write(f"Error generated as virtual halt is on line {main_list[0]} and last instruction is on line {main_list[1]}")
+                f.write("")
+            print(f"Error generated as virtual halt is on line {main_list[0]} and last instruction is on line {main_list[1]}")
 
 with open(to_open, "w") as f:
     f.write(text1)
