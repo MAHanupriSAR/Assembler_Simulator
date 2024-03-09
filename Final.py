@@ -300,7 +300,7 @@ def j_type_instruction(line):
                 line2=line1[1].split(",")
                 if(line2[0] in registers.keys() and convertible((line2[1]),21)):
                     reg=str(reg_binary_calc(line2[0]))
-                    imm=str(imm_binary_calc(int(line2[1]),20))
+                    imm=str(imm_binary_calc(int(line2[1]),21))
                     imm=imm[::-1]
                     imm_1=''
                     imm_3=''
@@ -313,7 +313,7 @@ def j_type_instruction(line):
                             
                     imm_1=imm_1[::-1]  
                     imm_3=imm_3[::-1]    
-                    imm_2=str(imm[10])
+                    imm_2=str(imm[11])
                     imm_4=str(imm[20])
                     imm_mod=imm_4+imm_3+imm_2+imm_1
                     with open(towrite, "a") as f:
