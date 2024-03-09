@@ -1,5 +1,7 @@
 import re
 
+to_open = "test3.txt"
+towrite = "binary_file.txt"
 line_number = 0
 flag_of_error = False
 
@@ -122,7 +124,7 @@ def r_type_instruction(line):
         binary=["0000000", str(reg_binary_calc(data2[2])), str(reg_binary_calc(data2[1])), str(r_function3[data1[0]]), str(reg_binary_calc(data2[0])), "0110011"]
         binary1=["0100000", str(reg_binary_calc(data2[2])), str(reg_binary_calc(data2[1])), str(r_function3[data1[0]]), str(reg_binary_calc(data2[0])), "0110011"]
 
-        with open("binary_file.txt", "a") as f:
+        with open(towrite, "a") as f:
             if data1[0] == "sub":
                 for i in binary1:
                     f.write(i)
@@ -134,7 +136,7 @@ def r_type_instruction(line):
     else:
         global line_number, flag_of_error
         flag_of_error = True
-        with open("binary_file.txt", "w") as f:
+        with open(towrite, "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
         
 
@@ -145,7 +147,7 @@ def i_type_instruction(line):
         pattern = r'^lw [a-zA-Z0-9]+,[-]?\d+\([a-zA-Z0-9]+\)$'
         if(not re.match(pattern, line)):
             flag_of_error = True
-            with open("binary_file.txt", "w") as f:
+            with open(towrite, "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
             return
         to_be_list = l1[1]
@@ -164,11 +166,11 @@ def i_type_instruction(line):
             else:
                 imm = binary_representation(imm, 12)
 
-            with open("binary_file.txt", "a") as f:
+            with open(towrite, "a") as f:
                 f.write(imm + src + i_funct3[instruction] + des + i_opcode[instruction] + "\n")
         else:
             flag_of_error = True
-            with open("binary_file.txt", "w") as f:
+            with open(towrite, "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
 
     elif((len(l1)==2) and (l1[0]=="addi" or l1[0]=="sltiu" or l1[0] == "jalr")):
@@ -186,15 +188,15 @@ def i_type_instruction(line):
             else:
                 imm = binary_representation(imm, 12)
 
-            with open("binary_file.txt", "a") as f:
+            with open(towrite, "a") as f:
                 f.write(imm + src + i_funct3[instruction] + des + i_opcode[instruction] + "\n")
         else:
             flag_of_error = True
-            with open("binary_file.txt", "w") as f:
+            with open(towrite, "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
     else:
         flag_of_error = True
-        with open("binary_file.txt", "w") as f:
+        with open(towrite, "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
 
 def s_type_instruction(line):
@@ -202,7 +204,7 @@ def s_type_instruction(line):
     pattern = r'^sw [a-zA-Z0-9]+,[-]?\d+\([a-zA-Z0-9]+\)$'
     if(not re.match(pattern, line)):
         flag_of_error = True
-        with open("binary_file.txt", "w") as f:
+        with open(towrite, "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
         return
     
@@ -220,11 +222,11 @@ def s_type_instruction(line):
         imm = int(split_line[2])
         imm = imm_binary_calc(imm, 12)
         to_write= imm[0:7] + reg_binary_calc(dest_reg) + reg_binary_calc(reg2) + "010" + imm[7:12] + "0100011" + "\n"
-        with open("binary_file.txt","a") as f:
+        with open(towrite,"a") as f:
             f.write(to_write)
     else:
         flag_of_error = True
-        with open("binary_file.txt", "w") as f:
+        with open(towrite, "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
 
 def b_type_instruction(line):
@@ -232,7 +234,7 @@ def b_type_instruction(line):
     pattern = r'^(beq|bne|blt|bge|bltu|bgeu) [a-zA-Z0-9]+,[a-zA-Z0-9]+,[-]?\d+$'
     if(not re.match(pattern, line)):
         flag_of_error = True
-        with open("binary_file.txt", "w") as f:
+        with open(towrite, "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
         return
     
@@ -247,11 +249,11 @@ def b_type_instruction(line):
         imm = int(split_line[3])
         imm = imm_binary_calc(imm, 16)
         to_write = imm[3]+imm[5:11] + reg_binary_calc(rs2) + reg_binary_calc(rs1) + inst_funct3[inst] + imm[11:15]+imm[4] + "1100011" + "\n"
-        with open("binary_file.txt","a") as f:
+        with open(towrite,"a") as f:
             f.write(to_write)
     else:
         flag_of_error = True
-        with open("binary_file.txt", "w") as f:
+        with open(towrite, "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
             
 def u_type_instruction(line):
@@ -259,7 +261,7 @@ def u_type_instruction(line):
     pattern = r'^(auipc|lui) [a-zA-Z0-9]+,?[-]?\d+$'
     if(not re.match(pattern, line)):
         flag_of_error = True
-        with open("binary_file.txt", "w") as f:
+        with open(towrite, "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
         return
     line = line.replace(" ", ",")
@@ -276,11 +278,11 @@ def u_type_instruction(line):
         
         imm_to_be_stored = imm[0:20]
 
-        with open("binary_file.txt", "a") as f:
+        with open(towrite, "a") as f:
             f.write(f"{imm_to_be_stored}{des}{instruction}\n")
     else:
         flag_of_error = True
-        with open("binary_file.txt", "w") as f:
+        with open(towrite, "w") as f:
             f.write(f"Error generated at line {str(line_number)}")
         return
 
@@ -291,7 +293,7 @@ def j_type_instruction(line):
     line1=line.split()
     if(not re.match(pattern, line)):
         flag_of_error=True
-        with open("binary_file.txt", "w") as f:
+        with open(towrite, "w") as f:
             f.write(f"Error generated at line {str(line_number)}") 
     else:
         if(len(line1)==2 and line1[0]=='jal'):
@@ -314,19 +316,58 @@ def j_type_instruction(line):
                     imm_2=str(imm[10])
                     imm_4=str(imm[19])
                     imm_mod=imm_4+imm_3+imm_2+imm_1
-                    with open("binary_file.txt", "a") as f:
+                    with open(towrite, "a") as f:
                         f.write(f"{imm_mod}{reg}{opcode}\n")
                 else:
                     flag_of_error=True
-                    with open("binary_file.txt", "w") as f:
+                    with open(towrite, "w") as f:
                         f.write(f"Error generated at line {str(line_number)}")
         else:
                 flag_of_error=True
                 with open('binary_file.txt','w') as f:
                     f.write(f"Error generated at line {str(line_number)}")
+
+line_no = 0
+label_list = []
+with open(to_open) as f:
+    for line in f:
+        line_no += 1
+        address = line_no*4
+        label = ""
+        i=0
+        if(":" in line):
+            for i in range(len(line)):
+                if (line[i]==":"):
+                    break
+                label += line[i]
+            label_list.append({label:line_no})
+
+text1 = ""
+with open(to_open) as f:
+    for line in f:
+        text1 += line
+
+line_num=0
+text = ""
+char = ":"
+with open(to_open) as f:
+    for line in f:
+        line_num+=1
+        if(char in line):
+            line = line[line.index(char)+1:]
+        for elements in label_list:
+            la = (list(elements.keys()))[0]
+            ln = (list(elements.values()))[0]
+            if la in line:
+                line = line.replace(str(la), str((line_num-ln)*4))
+        text += line
+
+with open(to_open, "w") as f:
+    f.write(text)
+
 main_list = [0,0]                 
 halt = "beq zero,zero,0"
-with open("test2.txt") as f:
+with open(to_open) as f:
     for line in f:
         if(flag_of_error==True):
             break
@@ -366,18 +407,21 @@ with open("test2.txt") as f:
         
         else:
             flag_of_error = True
-            with open("binary_file.txt", "w") as f:
+            with open(towrite, "w") as f:
                 f.write(f"Error generated at line {str(line_number)}")
 
 if(flag_of_error==False):
-    with open("binary_file.txt", "a") as f:
+    with open(towrite, "a") as f:
         f.write(f"00000000000000000000000001100011")
 
 if(flag_of_error==False):
     if(main_list[0]==0):
-        with open("binary_file.txt", "w") as f:
+        with open(towrite, "w") as f:
             f.write("Virtual halt absent")
     elif(len(main_list)==2):
         if(main_list[0] != main_list[1]):
-            with open("binary_file.txt", "w") as f:
+            with open(towrite, "w") as f:
                 f.write(f"Error generated as virtual halt is on line {main_list[0]} and last instruction is on line {main_list[1]}")
+
+with open(to_open, "w") as f:
+    f.write(text1)
