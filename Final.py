@@ -1,6 +1,6 @@
 import re
 
-to_open = "test3.txt"
+to_open = "test5.txt"
 towrite = "binary_file.txt"
 line_number = 0
 flag_of_error = False
@@ -375,7 +375,7 @@ with open(to_open) as f:
     for line in f:
         line_num+=1
         if(char in line):
-            if(not (is_continuous_alphabets(line[:line.index(char)]))):
+            if((not (is_continuous_alphabets(line[:line.index(char)]))) or (line[line.index(char) + 1] != " ")):
                 with open(towrite, "w") as fh:
                     fh.write("")
                 print(f"Error generated at line {str(line_num)}")
