@@ -30,7 +30,7 @@ def imm_binary_calc(imm, max_bits):
         return binary
 
 def is_continuous_alphabets(substring):
-    pattern = r'^[a-zA-Z]+$'
+    pattern = r'^[a-zA-Z0-9_]+$'
     if re.match(pattern, substring):
         return True
     else:
