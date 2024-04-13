@@ -320,13 +320,13 @@ def b_type_instruction(line, line_number):
         if(reg1_value >= reg2_value):
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
     if(line[17:20] == "101"):
-        if(binary_to_decimal(imm_binary_calc(reg1_binary),signed = False) >= binary_to_decimal(imm_binary_calc(reg2_binary),signed = False)):
+        if(binary_to_decimal(decimal_to_binary(reg1_value),signed = False) >= binary_to_decimal(decimal_to_binary(reg2_value),signed = False)):
             pc = pc + binary_to_decimal(imm_binary, signed=True)
     if(line[17:20] == "110"):
         if(reg1_value < reg2_value):
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
     if(line[17:20] == "111"):
-        if(binary_to_decimal(imm_binary_calc(reg1_binary),signed = False) < binary_to_decimal(imm_binary_calc(reg2_binary),signed = False)):
+        if(binary_to_decimal(decimal_to_binary(reg1_value),signed = False) < binary_to_decimal(decimal_to_binary(reg2_value),signed = False)):
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
 
     line_number = pc/4
