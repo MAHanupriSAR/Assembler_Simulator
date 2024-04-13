@@ -292,9 +292,17 @@ def i_type_instruction(line, line_number):
     main_list.append(temp_list)
     return line_number_to_return
 
-
 def s_type_instruction(line):
-    pass
+    reg1_binary = line[12:17]
+    reg2_binary = line[7:12]
+    reg1_value = register_values[register_decoder[reg1_binary]]
+    reg2_value = register_values[register_decoder[reg2_binary]]
+    imm = ""
+    imm = imm + line[0:7] + line[20:25]
+    decimal_memory_address = reg1_value + binary_to_decimal(binary_sign_extension(imm, 32, signed=True), signed = True)
+    binary_memory_address = decimal_to_binary(decimal_memory_address)
+    hex_memory_address = binary_to_hex(binary_memory_address)
+    memory_values[hex_memory_address] = reg2_value
 
 def b_type_instruction(line, line_number):
     pc = line_number
