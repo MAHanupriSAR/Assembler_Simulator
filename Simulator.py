@@ -297,6 +297,39 @@ def s_type_instruction(line):
     pass
 
 def b_type_instruction(line, line_number):
+    pc = line_number
+    imm_binary = ""
+    imm_binary = imm_binary + line[0]
+    imm_binary = imm_binary + line[24]
+    imm_binary = imm_binary + line[1:7]
+    imm_binary = imm_binary + line[20:24]
+    imm_binary = imm_binary + "0"
+
+    reg1_binary = line[12:17]
+    reg2_binary = line[7:12]
+    reg1_value = register_values[register_decoder[reg1_binary]]
+    reg2_value = register_values[register_decoder[reg2_binary]]
+
+    if(line[17:20] == "000"):
+        if(reg1_value == reg2_value):
+            pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
+    if(line[17:20] == "001"):
+        if(reg1_value != reg2_value):
+            pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
+    if(line[17:20] == "100"):
+        if(reg1_value >= reg2_value):
+            pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
+    if(line[17:20] == "101"):
+        if(binary_to_decimal(imm_binary_calc(reg1_binary),signed = False) >= binary_to_decimal(imm_binary_calc(reg2_binary),signed = False)):
+            pc = pc + binary_to_decimal(imm_binary, signed=True)
+    if(line[17:20] == "110"):
+        if(reg1_value < reg2_value):
+            pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
+    if(line[17:20] == "111"):
+        if(binary_to_decimal(imm_binary_calc(reg1_binary),signed = False) < binary_to_decimal(imm_binary_calc(reg2_binary),signed = False)):
+            pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
+
+    line_number = pc/4
     return line_number
 
 def u_type_instruction(line, line_number):
