@@ -236,7 +236,86 @@ def binary_to_hexadecimal(binary_str):
     return hexadecimal_string
 
 def r_type_instruction(line):
-    pass
+    line_number_to_return = line_number
+    temp_list = []
+    destination_register = line[20:25]
+    source_register1 = line[12:17]
+    source_register2 = line[7:12]
+    func3 = line[17:20]
+    func7 = line[0:7]
+    destination_register = register_decoder[destination_register]
+    source_register1 = register_decoder[source_register1]
+    source_register2 = register_decoder[source_register2]
+    if(func7 == "0000000" and func3 == "000"):
+        source_register1 = register_values[source_register1]
+        source_register2 = register_values[source_register2]
+        add=source_register1+source_register2
+        register_values[destination_register] = add
+
+    elif(func7 == "0100000" and func3 == "000"):
+        if(source_register1 == "x0"):
+            source_register2 = register_values[source_register2]
+            compliment= (m.pow(2,(m.floor(m.log2(source_register2))+1))-1)-source_register2 + 1
+            register_values[destination_register] = compliment
+        else:
+            source_register1 = register_values[source_register1]
+            source_register2 = register_values[source_register2]
+            sub=source_register1-source_register2
+            register_values[destination_register] = sub
+
+    elif(func3 == "001"):
+        source_register1 = register_values[source_register1]
+        source_register2 = register_values[source_register2]
+        leftshifter=binary_to_decimal((decimal_to_binary(source_register2))[27:32],False)
+        left_shift=source_register1 << leftshifter 
+        register_values[destination_register] = left_shift
+
+
+    elif(func3 == "010"):
+        source_register1 = register_values[source_register1]
+        source_register2 = register_values[source_register2]
+        if(source_register1<source_register2):
+            register_values[destination_register] = 1
+
+        
+    elif(func3 == "011"):
+        source_register1 = register_values[source_register1]
+        source_register2 = register_values[source_register2]
+        if(binary_to_decimal(decimal_to_binary(source_register1),False) < binary_to_decimal(decimal_to_binary(source_register2),False)):
+            register_values[destination_register] = 1
+    elif(func3 == "100"):
+        source_register1 = register_values[source_register1]
+        source_register2 = register_values[source_register2]
+        xor=source_register1 ^ source_register2
+        register_values[destination_register] = xor
+
+        
+    elif(func3 == "101"):
+        source_register1 = register_values[source_register1]
+        source_register2 = register_values[source_register2]
+        rightshifter=binary_to_decimal((decimal_to_binary(source_register2))[27:32],False)
+        right_shift=source_register1 >> rightshifter 
+        register_values[destination_register] = right_shift
+    elif(func3 == "110"):
+        source_register1 = register_values[source_register1]
+        source_register2 = register_values[source_register2]
+        oor=source_register1|source_register2
+        register_values[destination_register] = oor
+
+        
+    elif(func3 == "111"):
+        source_register1 = register_values[source_register1]
+        source_register2 = register_values[source_register2]
+        aand=source_register1&source_register2
+        register_values[destination_register] = aand
+    
+    line_number = line_number*4
+    line_number = "0b" + binary_sign_extension(decimal_to_binary(line_number), 32)
+    temp_list.append(line_number)
+    for i in range(32):
+        value_is = "0b" + binary_sign_extension(decimal_to_binary(register_values[registers_list[i]]), 32)
+        temp_list.append(value_is)
+    main_list.append(temp_list)
 
 def i_type_instruction(line, line_number):
     line_number_to_return = line_number
@@ -360,7 +439,26 @@ def u_type_instruction(line, line_number):
 
 
 def j_type_instruction(line):
-    pass
+    line_number_to_return = line_number
+    temp_list = []
+    destination_register = line[20:25]
+    destination_register = register_decoder[destination_register]
+    immediate = line[0:20]
+    register_values[destination_register] = (line_number*4)+4
+    immediate = binary_to_decimal(binary_sign_extension((immediate[0:20]+"0"), 32))
+    program_counter=(line_number*4)+immediate
+    program_counter = decimal_to_binary(program_counter)
+    program_counter = program_counter[0:31] + "0"
+    to_append = "0b" + program_counter
+    temp_list.append(to_append)
+    program_counter = binary_to_decimal(program_counter, False)
+    line_number_to_return = program_counter/4
+    line_number_to_return-=1
+    for i in range(32):
+            value_is = "0b" + binary_sign_extension(decimal_to_binary(register_values[registers_list[i]]), 32)
+            temp_list.append(value_is)
+    main_list.append(temp_list)
+    return line_number_to_return
 
 with open(to_open) as f:
     for line in f:    
@@ -389,6 +487,6 @@ while(line_number<len(line_list)):
         u_type_instruction(curr_line, line_number)
 
     elif(instruction_opcode in j_type_opcode):
-        j_type_instruction(curr_line)
+        line_number = j_type_instruction(curr_line, line_number)
 
     line_number+=1
