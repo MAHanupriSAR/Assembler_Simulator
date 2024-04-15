@@ -182,6 +182,9 @@ binary_to_hex = {
 #         converted = converted + (int(binary[i]))(2*(no_of_bits-i-1))
 #     return converted
 
+def compliment(n):
+    return int((2 ** (math.floor(math.log2(n)) + 1)) - 1) - n + 1
+
 def decimal_to_binary(imm):
     binary = ""
     if(imm>=0):
@@ -220,13 +223,13 @@ def binary_to_decimal(binary, signed = True):
     converted = 0
     if(signed == True):
         no_of_bits = len(binary)
-        converted = converted + (int(binary[0]))(-1(int(binary[0])))(2**(no_of_bits-1))
+        converted = converted + (int(binary[0]))*(-1**(int(binary[0])))*(2**(no_of_bits-1))
         for i in range(1,no_of_bits):
-            converted = converted + (int(binary[i]))(2*(no_of_bits-i-1))
+            converted = converted + (int(binary[i]))*(2**(no_of_bits-i-1))
     else:
         no_of_bits = len(binary)
         for i in range(0,no_of_bits):
-            converted = converted + (int(binary[i]))(2*(no_of_bits-i-1))
+            converted = converted + (int(binary[i]))*(2**(no_of_bits-i-1))
     return converted
 
 def binary_to_hexadecimal(binary_str):
