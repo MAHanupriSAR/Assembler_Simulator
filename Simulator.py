@@ -1,3 +1,4 @@
+import math as m
 to_open="test.txt"
 to_write = "simulator.txt"
 
@@ -13,37 +14,37 @@ j_type_opcode = ["1101111"]
 registers_list = ["x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "x10", "x11", "x12", "x13", "x14", "x15", "x16", "x17", "x18", "x19", "x20", "x21", "x22", "x23", "x24", "x25", "x26", "x27", "x28", "x29", "x30", "x31"]
 
 memory_values = {
-    "00010000": 0,
-    "00010004": 0,
-    "00010008": 0,
-    "0001000c": 0,
-    "00010010": 0,
-    "00010014": 0,
-    "00010018": 0,
-    "0001001c": 0,
-    "00010020": 0,
-    "00010024": 0,
-    "00010028": 0,
-    "0001002c": 0,
-    "00010030": 0,
-    "00010034": 0,
-    "00010038": 0,
-    "0001003c": 0,
-    "00010040": 0,
-    "00010044": 0,
-    "00010048": 0,
-    "0001004c": 0,
-    "00010050": 0,
-    "00010054": 0,
-    "00010058": 0,
-    "0001005c": 0,
-    "00010060": 0,
-    "00010064": 0,
-    "00010068": 0,
-    "0001006c": 0,
-    "00010070": 0,
-    "00010074": 0,
-    "00010078": 0,
+    "0x00010000": 0,
+    "0x00010004": 0,
+    "0x00010008": 0,
+    "0x0001000c": 0,
+    "0x00010010": 0,
+    "0x00010014": 0,
+    "0x00010018": 0,
+    "0x0001001c": 0,
+    "0x00010020": 0,
+    "0x00010024": 0,
+    "0x00010028": 0,
+    "0x0001002c": 0,
+    "0x00010030": 0,
+    "0x00010034": 0,
+    "0x00010038": 0,
+    "0x0001003c": 0,
+    "0x00010040": 0,
+    "0x00010044": 0,
+    "0x00010048": 0,
+    "0x0001004c": 0,
+    "0x00010050": 0,
+    "0x00010054": 0,
+    "0x00010058": 0,
+    "0x0001005c": 0,
+    "0x00010060": 0,
+    "0x00010064": 0,
+    "0x00010068": 0,
+    "0x0001006c": 0,
+    "0x00010070": 0,
+    "0x00010074": 0,
+    "0x00010078": 0,
 }
 
 register_values = {
@@ -135,55 +136,8 @@ binary_to_hex = {
     "1111": "F"
 }
 
-# def decimal_to_binary(imm, max_bits, signed = True):
-#     if imm < (-(2*(max_bits-1))) or imm > ((2*(max_bits-1))-1):
-#         return False
-#     else:
-#         binary = ""
-#         if(imm>=0):
-#             while imm > 0:
-#                 rem = str(imm % 2)
-#                 binary = rem + binary
-#                 imm //= 2
-#         else:
-#             temp = abs(int(pow(2,max_bits)-1) - abs(imm) + 1)
-#             while temp > 0:
-#                 rem = str(temp % 2)
-#                 binary = rem + binary
-#                 temp //= 2
-
-#         if len(binary) < max_bits:
-#             if(signed == True):
-#                 if imm < 0:
-#                     binary = "1" * (max_bits - len(binary)) + binary
-#                 else:
-#                     binary = "0" * (max_bits - len(binary)) + binary
-#             else:
-#                 binary = "0" * (max_bits - len(binary)) + binary
-#         return binary
-
-# def binary_sign_extension(binary, max_bits, signed = True):
-#     no_of_bits = len(binary)
-#     bit_to_extend = max_bits - no_of_bits
-#     if(signed == True):
-#         if(binary[0] == "0"):
-#             binary = "0"*bit_to_extend + binary
-#         elif(binary[0] == "1"):
-#             binary = "1"*bit_to_extend + binary
-#     else:
-#         binary = "0"*bit_to_extend + binary
-#     return binary
-
-# def binary_to_decimal(binary):
-#     converted = 0
-#     no_of_bits = len(binary)
-#     converted = converted + (int(binary[0]))(-1(int(binary[0])))(2**(no_of_bits-1))
-#     for i in range(1,no_of_bits):
-#         converted = converted + (int(binary[i]))(2*(no_of_bits-i-1))
-#     return converted
-
-def compliment(n):
-    return int((2 ** (math.floor(math.log2(n)) + 1)) - 1) - n + 1
+# def compliment(n):
+#     return int((2 ** (math.floor(math.log2(n)) + 1)) - 1) - n + 1
 
 def decimal_to_binary(imm):
     binary = ""
@@ -232,13 +186,12 @@ def binary_to_decimal(binary, signed = True):
             converted = converted + (int(binary[i]))*(2**(no_of_bits-i-1))
     return converted
 
-def binary_to_hexadecimal(binary_str):
-    hexadecimal_string = ""
-    for i in range(0, len(binary_str), 4):
-        hexadecimal_string += binary_to_hex[binary_str[i:i+4]]
-    return hexadecimal_string
+def binary_to_hexadecimal(binary_string):
+    decimal_number = int(binary_string, 2)  # Convert binary to decimal
+    hex_number = hex(decimal_number)  # Convert decimal to hexadecimal
+    return hex_number
 
-def r_type_instruction(line):
+def r_type_instruction(line, line_number):
     line_number_to_return = line_number
     temp_list = []
     destination_register = line[20:25]
@@ -312,7 +265,7 @@ def r_type_instruction(line):
         aand=source_register1&source_register2
         register_values[destination_register] = aand
     
-    line_number = line_number*4
+    line_number = (line_number+1)*4
     line_number = "0b" + binary_sign_extension(decimal_to_binary(line_number), 32)
     temp_list.append(line_number)
     for i in range(32):
@@ -365,7 +318,7 @@ def i_type_instruction(line, line_number):
         main_list.append(temp_list)
         return line_number_to_return
 
-    line_number = line_number*4
+    line_number = (line_number+1)*4
     line_number = "0b" + binary_sign_extension(decimal_to_binary(line_number), 32)
     temp_list.append(line_number)
     for i in range(32):
@@ -374,7 +327,9 @@ def i_type_instruction(line, line_number):
     main_list.append(temp_list)
     return line_number_to_return
 
-def s_type_instruction(line):
+def s_type_instruction(line,line_number):
+    line_number_to_return = line_number
+    temp_list = []
     reg1_binary = line[12:17]
     reg2_binary = line[7:12]
     reg1_value = register_values[register_decoder[reg1_binary]]
@@ -383,17 +338,27 @@ def s_type_instruction(line):
     imm = imm + line[0:7] + line[20:25]
     decimal_memory_address = reg1_value + binary_to_decimal(binary_sign_extension(imm, 32, signed=True), signed = True)
     binary_memory_address = decimal_to_binary(decimal_memory_address)
-    hex_memory_address = binary_to_hex(binary_memory_address)
+    hex_memory_address = binary_to_hexadecimal(binary_memory_address)
     memory_values[hex_memory_address] = reg2_value
+    line_number = (line_number+1)*4
+    line_number = "0b" + binary_sign_extension(decimal_to_binary(line_number), 32)
+    temp_list.append(line_number)
+    for i in range(32):
+        value_is = "0b" + binary_sign_extension(decimal_to_binary(register_values[registers_list[i]]), 32)
+        temp_list.append(value_is)
+    main_list.append(temp_list)
 
 def b_type_instruction(line, line_number):
-    pc = line_number
+    print("linee: ",line_number)
+    temp_list = []
+    pc = line_number*4
     imm_binary = ""
     imm_binary = imm_binary + line[0]
     imm_binary = imm_binary + line[24]
     imm_binary = imm_binary + line[1:7]
     imm_binary = imm_binary + line[20:24]
     imm_binary = imm_binary + "0"
+    print("here ", imm_binary)
 
     reg1_binary = line[12:17]
     reg2_binary = line[7:12]
@@ -401,26 +366,44 @@ def b_type_instruction(line, line_number):
     reg2_value = register_values[register_decoder[reg2_binary]]
 
     if(line[17:20] == "000"):
+        print("hfkdsfhk")
         if(reg1_value == reg2_value):
+            print("test1", line_number, pc)
+            print(binary_sign_extension(imm_binary, 32, signed = True))
+            print(binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True))
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
+            print(pc)
     if(line[17:20] == "001"):
         if(reg1_value != reg2_value):
+            print("test2")
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
+            print(pc)
     if(line[17:20] == "100"):
         if(reg1_value >= reg2_value):
+            print("test3")
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
     if(line[17:20] == "101"):
         if(binary_to_decimal(decimal_to_binary(reg1_value),signed = False) >= binary_to_decimal(decimal_to_binary(reg2_value),signed = False)):
+            print("test4")
             pc = pc + binary_to_decimal(imm_binary, signed=True)
     if(line[17:20] == "110"):
         if(reg1_value < reg2_value):
+            print("test5")
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
     if(line[17:20] == "111"):
         if(binary_to_decimal(decimal_to_binary(reg1_value),signed = False) < binary_to_decimal(decimal_to_binary(reg2_value),signed = False)):
+            print("test6")
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
 
+    pc_value = (line_number+1)*4
+    line_number = "0b" + binary_sign_extension(decimal_to_binary(pc_value), 32)
+    temp_list.append(line_number)
+    for i in range(32):
+        value_is = "0b" + binary_sign_extension(decimal_to_binary(register_values[registers_list[i]]), 32)
+        temp_list.append(value_is)
+    main_list.append(temp_list)
     line_number = pc/4
-    return line_number
+    return int(line_number)
 
 def u_type_instruction(line, line_number):
     temp_list = []
@@ -432,7 +415,7 @@ def u_type_instruction(line, line_number):
         register_values[register_decoder[destination_register]] = Program_counter + binary_to_decimal(binary_sign_extension((immediate + 12*"0"), 32, False))
     elif (opcode == "0110111"):
         register_values[register_decoder[destination_register]] = binary_to_decimal(binary_sign_extension((immediate + 12*"0"), 32, False))
-    line_number = line_number*4
+    line_number = (line_number+1)*4
     line_number = "0b" + binary_sign_extension(decimal_to_binary(line_number), 32)
     temp_list.append(line_number)
     for i in range(32):
@@ -441,7 +424,9 @@ def u_type_instruction(line, line_number):
     main_list.append(temp_list)
 
 
-def j_type_instruction(line):
+def j_type_instruction(line, line_number):
+    lines = (line+1)*4
+    lines = "0b" + binary_sign_extension(decimal_to_binary(lines), 32)
     line_number_to_return = line_number
     temp_list = []
     destination_register = line[20:25]
@@ -453,7 +438,7 @@ def j_type_instruction(line):
     program_counter = decimal_to_binary(program_counter)
     program_counter = program_counter[0:31] + "0"
     to_append = "0b" + program_counter
-    temp_list.append(to_append)
+    temp_list.append(lines)
     program_counter = binary_to_decimal(program_counter, False)
     line_number_to_return = program_counter/4
     line_number_to_return-=1
@@ -473,23 +458,31 @@ line_number = 0
 while(line_number<len(line_list)):
     line = line_list[line_number];   
     curr_line = line.strip()
-    instruction_opcode = curr_line[25:31]   
+    instruction_opcode = curr_line[25:32]   
     if(instruction_opcode in r_type_opcode):
-        r_type_instruction(curr_line)   
+        r_type_instruction(curr_line, line_number)   
             
     elif(instruction_opcode in i_type_opcode):
-        line_number = i_type_instruction(curr_line, line_number)
+        line_number = int(i_type_instruction(curr_line, line_number))
         
     elif(instruction_opcode in s_type_opcode):
-        s_type_instruction(curr_line)
+        s_type_instruction(curr_line, line_number)
 
     elif(instruction_opcode in b_type_opcode):
-        line_number = b_type_instruction(curr_line, line_number)
+        line_number = int(b_type_instruction(curr_line, line_number))
 
     elif(instruction_opcode in u_type_opcode):
         u_type_instruction(curr_line, line_number)
 
     elif(instruction_opcode in j_type_opcode):
-        line_number = j_type_instruction(curr_line, line_number)
+        line_number = int(j_type_instruction(curr_line, line_number))
 
     line_number+=1
+
+
+with open(to_write, "a") as f:
+    for line in main_list:
+        for instruction in line:
+            f.write(str(instruction))
+            f.write(" ")
+        f.write("\n")
