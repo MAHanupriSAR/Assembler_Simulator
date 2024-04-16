@@ -349,7 +349,6 @@ def s_type_instruction(line,line_number):
     main_list.append(temp_list)
 
 def b_type_instruction(line, line_number):
-    print("linee: ",line_number)
     temp_list = []
     pc = line_number*4
     imm_binary = ""
@@ -358,7 +357,6 @@ def b_type_instruction(line, line_number):
     imm_binary = imm_binary + line[1:7]
     imm_binary = imm_binary + line[20:24]
     imm_binary = imm_binary + "0"
-    print("here ", imm_binary)
 
     reg1_binary = line[12:17]
     reg2_binary = line[7:12]
@@ -366,33 +364,22 @@ def b_type_instruction(line, line_number):
     reg2_value = register_values[register_decoder[reg2_binary]]
 
     if(line[17:20] == "000"):
-        print("hfkdsfhk")
         if(reg1_value == reg2_value):
-            print("test1", line_number, pc)
-            print(binary_sign_extension(imm_binary, 32, signed = True))
-            print(binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True))
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
-            print(pc)
     if(line[17:20] == "001"):
         if(reg1_value != reg2_value):
-            print("test2")
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
-            print(pc)
     if(line[17:20] == "100"):
         if(reg1_value >= reg2_value):
-            print("test3")
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
     if(line[17:20] == "101"):
         if(binary_to_decimal(decimal_to_binary(reg1_value),signed = False) >= binary_to_decimal(decimal_to_binary(reg2_value),signed = False)):
-            print("test4")
             pc = pc + binary_to_decimal(imm_binary, signed=True)
     if(line[17:20] == "110"):
         if(reg1_value < reg2_value):
-            print("test5")
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
     if(line[17:20] == "111"):
         if(binary_to_decimal(decimal_to_binary(reg1_value),signed = False) < binary_to_decimal(decimal_to_binary(reg2_value),signed = False)):
-            print("test6")
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
 
     pc_value = (line_number+1)*4
@@ -461,8 +448,12 @@ with open(to_open) as f:
 
 line_number = 0
 while(line_number<len(line_list)):
-    line = line_list[line_number];   
+    line = line_list[line_number]
     curr_line = line.strip()
+    if(curr_line=="00000000000000000000000001100011"):
+        if(len(main_list)>0):
+            main_list.append(main_list[-1])
+        break
     instruction_opcode = curr_line[25:32]   
     if(instruction_opcode in r_type_opcode):
         r_type_instruction(curr_line, line_number)   
