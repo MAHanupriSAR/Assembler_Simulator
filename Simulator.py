@@ -223,7 +223,8 @@ def r_type_instruction(line, line_number):
     elif(func3 == "001"):
         source_register1 = register_values[source_register1]
         source_register2 = register_values[source_register2]
-        leftshifter=binary_to_decimal((decimal_to_binary(source_register2))[27:32],False)
+        leftshifter = binary_sign_extension(decimal_to_binary(source_register2), 32)[27:32]
+        leftshifter = binary_to_decimal(leftshifter, False)
         left_shift=source_register1 << leftshifter 
         register_values[destination_register] = left_shift
 
