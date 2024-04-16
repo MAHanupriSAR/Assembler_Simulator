@@ -12,6 +12,7 @@ u_type_opcode = ["0110111", "0010111"]
 j_type_opcode = ["1101111"]
 
 registers_list = ["x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "x10", "x11", "x12", "x13", "x14", "x15", "x16", "x17", "x18", "x19", "x20", "x21", "x22", "x23", "x24", "x25", "x26", "x27", "x28", "x29", "x30", "x31"]
+memory_list = ["0x00010000", "0x00010004", "0x00010008", "0x0001000c", "0x00010010", "0x00010014", "0x00010018", "0x0001001c", "0x00010020", "0x00010024","0x00010028", "0x0001002c", "0x00010030", "0x00010034", "0x00010038","0x0001003c", "0x00010040", "0x00010044", "0x00010048", "0x0001004c","0x00010050", "0x00010054", "0x00010058", "0x0001005c", "0x00010060","0x00010064", "0x00010068", "0x0001006c", "0x00010070", "0x00010074","0x00010078"]
 
 memory_values = {
     "0x00010000": 0,
@@ -188,9 +189,9 @@ def binary_to_decimal(binary, signed = True):
 
 def binary_to_hexadecimal(binary_string):
     decimal_number = int(binary_string, 2)  # Convert binary to decimal
-    hex_number = hex(decimal_number)  # Convert decimal to hexadecimal
-    hex_number = "0x" + hex_number
-    return hex_number
+    hex_number = hex(decimal_number)[2:]  # Convert decimal to hexadecimal
+    hex_number = binary_sign_extension(str(hex_number), 8, False)
+    return "0x"+hex_number
 
 def r_type_instruction(line, line_number):
     line_number_to_return = line_number
@@ -483,4 +484,11 @@ with open(to_write, "a") as f:
         for instruction in line:
             f.write(str(instruction))
             f.write(" ")
+        f.write("\n")
+
+with open(to_write, "a") as f:
+    for address in memory_list:
+        f.write(address)
+        f.write(":")
+        f.write("0b"+ binary_sign_extension(decimal_to_binary(memory_values[address]), 32))
         f.write("\n")
