@@ -50,7 +50,7 @@ memory_values = {
 register_values = {
     "x0": 0,
     "x1": 0,
-    "x2": 0,
+    "x2": 256,
     "x3": 0,
     "x4": 0,
     "x5": 0,
@@ -189,6 +189,7 @@ def binary_to_decimal(binary, signed = True):
 def binary_to_hexadecimal(binary_string):
     decimal_number = int(binary_string, 2)  # Convert binary to decimal
     hex_number = hex(decimal_number)  # Convert decimal to hexadecimal
+    hex_number = "0x" + hex_number
     return hex_number
 
 def r_type_instruction(line, line_number):
