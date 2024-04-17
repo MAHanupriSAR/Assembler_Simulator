@@ -457,13 +457,11 @@ while(line_number<len(line_list)):
     if(len(main_list)>0):
         for inst in main_list:
             inst[1] = "0b00000000000000000000000000000000"
-    print(line)
     if(line=="00000000000000000000000001100011"):
         if(len(main_list)>0):
             main_list.append(main_list[-1])
         break
     instruction_opcode = curr_line[25:32]   
-    print(line_number+1, instruction_opcode, register_values["x19"])
     if(instruction_opcode in r_type_opcode):
         r_type_instruction(curr_line, line_number)   
             
