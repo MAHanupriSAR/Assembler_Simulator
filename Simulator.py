@@ -138,9 +138,6 @@ binary_to_hex = {
     "1111": "F"
 }
 
-# def compliment(n):
-#     return int((2 ** (math.floor(math.log2(n)) + 1)) - 1) - n + 1
-
 def decimal_to_binary(imm):
     binary = ""
     if(imm>=0):
@@ -454,6 +451,12 @@ line_number = 0
 while(line_number<len(line_list)):
     line = line_list[line_number]
     curr_line = line.strip()
+
+    register_values["x0"] = 0
+    if(len(main_list)>0):
+        for inst in main_list:
+            inst[1] = "0b00000000000000000000000000000000"
+
     if(curr_line=="00000000000000000000000001100011"):
         if(len(main_list)>0):
             main_list.append(main_list[-1])
