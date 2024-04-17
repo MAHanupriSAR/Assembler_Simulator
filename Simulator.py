@@ -350,6 +350,7 @@ def s_type_instruction(line,line_number):
     main_list.append(temp_list)
 
 def b_type_instruction(line, line_number):
+    line_number_to_return = line_number
     temp_list = []
     pc = line_number*4
     imm_binary = ""
@@ -363,7 +364,6 @@ def b_type_instruction(line, line_number):
     reg2_binary = line[7:12]
     reg1_value = register_values[register_decoder[reg1_binary]]
     reg2_value = register_values[register_decoder[reg2_binary]]
-
     if(line[17:20] == "000"):
         if(reg1_value == reg2_value):
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
@@ -396,6 +396,9 @@ def b_type_instruction(line, line_number):
         temp_list.append(value_is)
     main_list.append(temp_list)
     line_number = pc/4
+    if(line_number_to_return==line_number):
+        return line_number_to_return
+    line_number-=1
     return int(line_number)
 
 def u_type_instruction(line, line_number):
@@ -454,12 +457,13 @@ while(line_number<len(line_list)):
     if(len(main_list)>0):
         for inst in main_list:
             inst[1] = "0b00000000000000000000000000000000"
-
-    if(curr_line=="00000000000000000000000001100011"):
+    print(line)
+    if(line=="00000000000000000000000001100011"):
         if(len(main_list)>0):
             main_list.append(main_list[-1])
         break
     instruction_opcode = curr_line[25:32]   
+    print(line_number+1, instruction_opcode, register_values["x19"])
     if(instruction_opcode in r_type_opcode):
         r_type_instruction(curr_line, line_number)   
             
