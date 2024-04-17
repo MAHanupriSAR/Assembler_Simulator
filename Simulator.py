@@ -2,6 +2,8 @@ import math as m
 import sys
 to_open=sys.argv[1]
 to_write=sys.argv[2]
+# to_open="test5.txt"
+# to_write = "simulator.txt"
 
 line_list = []
 main_list = []
@@ -152,8 +154,6 @@ def add_one_to_binary(binary_str):
     if index < 0:
         binary_list.insert(0, 1)
     return ''.join(map(str, binary_list))
-
-
 def binary_to_decimal(binary, signed = True):
     converted = 0
     if(signed == True):
@@ -497,6 +497,11 @@ while(line_number<len(line_list)):
         line_number = int(j_type_instruction(curr_line, line_number))
 
     line_number+=1
+    # with open(to_write, "a") as f:
+    #     for num in register_values.values():
+    #         f.write(str(num))
+    #         f.write(" ")
+    #     f.write("\n")
 
 with open(to_write, "a") as f:
     for line in main_list:
