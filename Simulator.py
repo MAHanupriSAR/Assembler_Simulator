@@ -425,9 +425,9 @@ def j_type_instruction(line, line_number):
     immediate_un = line[0:20]
     immediate = ""
     immediate= immediate+immediate_un[0]
-    immediate=immediate+immediate_un[13:22]
-    immediate=immediate+ immediate_un[12]
-    immediate=immediate+ immediate_un[1:10]
+    immediate=immediate+immediate_un[12:21]
+    immediate=immediate+ immediate_un[11]
+    immediate=immediate+ immediate_un[1:11]
     register_values[destination_register] = (line_number*4)+4
     immediate = binary_to_decimal(binary_sign_extension((immediate[0:20]+"0"), 32))
     program_counter=(line_number*4)+immediate
