@@ -1,4 +1,7 @@
 import math as m
+# import sys
+# to_open=sys.argv[1]
+# to_write=sys.argv[2]
 to_open="test.txt"
 to_write = "simulator.txt"
 
