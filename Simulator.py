@@ -308,13 +308,13 @@ def i_type_instruction(line, line_number):
     elif(opcode == "1100111" and func3=="000"): #jalr incomplete
         register_values[destination_register] = (line_number*4)+4
         immediate = binary_to_decimal(binary_sign_extension(immediate, 32))
-        program_counter = register_values["x6"] + immediate
-        program_counter = decimal_to_binary(program_counter)
+        program_counter = register_values[source_register] + immediate
+        program_counter = binary_sign_extension(decimal_to_binary(program_counter), 32, False)
         program_counter = program_counter[0:31] + "0"
         to_append = "0b" + program_counter
         temp_list.append(to_append)
         program_counter = binary_to_decimal(program_counter, False)
-        line_number_to_return = program_counter/4
+        line_number_to_return = int(program_counter/4)
         line_number_to_return-=1
         for i in range(32):
             value_is = "0b" + binary_sign_extension(decimal_to_binary(register_values[registers_list[i]]), 32)
