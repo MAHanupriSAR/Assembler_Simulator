@@ -422,9 +422,7 @@ def j_type_instruction(line, line_number):
     immediate = imm[12:20] + immediate
     immediate = imm[0] + immediate + "0"
     immediate = binary_to_decimal(binary_sign_extension(immediate, 32, False), False)
-    print(immediate)
     register_values[destination_register] = program_counter + 4
-    print(register_values[destination_register])
     program_counter = program_counter + immediate
     temp_list.append("0b" + binary_sign_extension(decimal_to_binary(program_counter), 32, False))
     for i in range(32):
