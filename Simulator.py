@@ -415,7 +415,7 @@ def u_type_instruction(line, line_number):
 def j_type_instruction(line, line_number):
     lines = (int(line_number)+1)*4
     lines = decimal_to_binary(lines)
-    lines = binary_sign_extension(lines, 32)
+    lines = "0b" + binary_sign_extension(lines, 32)
     line_number_to_return = line_number
     temp_list = []
     destination_register = line[20:25]
