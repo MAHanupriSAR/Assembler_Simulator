@@ -413,34 +413,28 @@ def u_type_instruction(line, line_number):
 
 
 def j_type_instruction(line, line_number):
-    lines = (int(line_number)+1)*4
-    lines = decimal_to_binary(lines)
-    lines = "0b" + binary_sign_extension(lines, 32)
-    line_number_to_return = line_number
-    temp_list = []
-    destination_register = line[20:25]
-    destination_register = register_decoder[destination_register]
-    immediate_un = line[0:19]
-    immediate = ""
-    immediate= immediate+immediate_un[0]
-    immediate=immediate+immediate_un[12:20]
-    immediate=immediate+ immediate_un[11]
-    immediate=immediate+ immediate_un[1:11]
-    register_values[destination_register] = (line_number*4)+4
-    immediate = binary_to_decimal(binary_sign_extension((immediate +"0"), 32))
-    program_counter=(line_number*4)+immediate
-    program_counter = binary_sign_extension(decimal_to_binary(program_counter), 32)
-    program_counter = program_counter[0:31] + "0"
-    to_append = "0b" + program_counter
-    temp_list.append(lines)
-    program_counter = binary_to_decimal(program_counter, False)
-    line_number_to_return = int(program_counter/4)
-    line_number_to_return-=1
+    temp_list=[]
+    program_counter = line_number*4
+    destination_register = register_decoder[line[20:25]]
+    imm = line[0:20]
+    immediate = imm[1:11]
+    immediate = imm[11] + immediate
+    immediate = imm[12:20] + immediate
+    immediate = imm[0] + immediate + "0"
+    immediate = binary_to_decimal(binary_sign_extension(immediate, 32, False), False)
+    print(immediate)
+    register_values[destination_register] = program_counter + 4
+    print(register_values[destination_register])
+    program_counter = program_counter + immediate
+    temp_list.append("0b" + binary_sign_extension(decimal_to_binary(program_counter), 32, False))
     for i in range(32):
-            value_is = "0b" + binary_sign_extension(decimal_to_binary(register_values[registers_list[i]]), 32)
-            temp_list.append(value_is)
+        value_is = "0b" + binary_sign_extension(decimal_to_binary(register_values[registers_list[i]]), 32)
+        temp_list.append(value_is)
+    line_number = int(program_counter/4)
     main_list.append(temp_list)
-    return line_number_to_return
+    line_number-=1
+    return line_number
+
 
 with open(to_open) as f:
     for line in f:    
