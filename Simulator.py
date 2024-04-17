@@ -413,8 +413,9 @@ def u_type_instruction(line, line_number):
 
 
 def j_type_instruction(line, line_number):
-    lines = (line+1)*4
-    lines = "0b" + binary_sign_extension(decimal_to_binary(lines), 32)
+    lines = (int(line_number)+1)*4
+    lines = decimal_to_binary(lines)
+    lines = binary_sign_extension(lines, 32)
     line_number_to_return = line_number
     temp_list = []
     destination_register = line[20:25]
@@ -428,12 +429,12 @@ def j_type_instruction(line, line_number):
     register_values[destination_register] = (line_number*4)+4
     immediate = binary_to_decimal(binary_sign_extension((immediate[0:20]+"0"), 32))
     program_counter=(line_number*4)+immediate
-    program_counter = decimal_to_binary(program_counter)
+    program_counter = binary_sign_extension(decimal_to_binary(program_counter), 32)
     program_counter = program_counter[0:31] + "0"
     to_append = "0b" + program_counter
     temp_list.append(lines)
     program_counter = binary_to_decimal(program_counter, False)
-    line_number_to_return = program_counter/4
+    line_number_to_return = int(program_counter/4)
     line_number_to_return-=1
     for i in range(32):
             value_is = "0b" + binary_sign_extension(decimal_to_binary(register_values[registers_list[i]]), 32)
