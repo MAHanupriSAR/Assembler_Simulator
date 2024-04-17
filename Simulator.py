@@ -302,7 +302,7 @@ def i_type_instruction(line, line_number):
         if(unsinged_rs<unsigned_imm):
             register_values[destination_register] = 1
 
-    elif(opcode == "1100111" and func3=="000"): #jalr incomplete
+    elif(opcode == "1100111" and func3=="000"):
         register_values[destination_register] = (line_number*4)+4
         immediate = binary_to_decimal(binary_sign_extension(immediate, 32))
         program_counter = register_values[source_register] + immediate
@@ -383,9 +383,14 @@ def b_type_instruction(line, line_number):
         if(binary_to_decimal(decimal_to_binary(reg1_value),signed = False) < binary_to_decimal(decimal_to_binary(reg2_value),signed = False)):
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
 
-    pc_value = (line_number+1)*4
-    line_number = "0b" + binary_sign_extension(decimal_to_binary(pc_value), 32)
-    temp_list.append(line_number)
+    if(int(pc/4)!=line_number):
+        line_number = "0b" + binary_sign_extension(decimal_to_binary(pc), 32, False)
+        temp_list.append(line_number)
+    else:
+        pc_value = (line_number+1)*4
+        line_number = "0b" + binary_sign_extension(decimal_to_binary(pc_value), 32, False)
+        temp_list.append(line_number)
+
     for i in range(32):
         value_is = "0b" + binary_sign_extension(decimal_to_binary(register_values[registers_list[i]]), 32)
         temp_list.append(value_is)
