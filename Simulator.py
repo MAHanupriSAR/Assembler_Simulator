@@ -1,9 +1,7 @@
 import math as m
-# import sys
-# to_open=sys.argv[1]
-# to_write=sys.argv[2]
-to_open="test.txt"
-to_write = "simulator.txt"
+import sys
+to_open=sys.argv[1]
+to_write=sys.argv[2]
 
 line_list = []
 main_list = []
@@ -141,6 +139,34 @@ binary_to_hex = {
     "1111": "F"
 }
 
+def add_one_to_binary(binary_str):
+    binary_list = [int(bit) for bit in binary_str]
+    index = len(binary_list) - 1
+    while index >= 0:
+        if binary_list[index] == 0:
+            binary_list[index] = 1
+            break
+        else:
+            binary_list[index] = 0
+            index -= 1
+    if index < 0:
+        binary_list.insert(0, 1)
+    return ''.join(map(str, binary_list))
+
+
+def binary_to_decimal(binary, signed = True):
+    converted = 0
+    if(signed == True):
+        no_of_bits = len(binary)
+        converted = converted + (int(binary[0]))*(-1**(int(binary[0])))*(2**(no_of_bits-1))
+        for i in range(1,no_of_bits):
+            converted = converted + (int(binary[i]))*(2**(no_of_bits-i-1))
+    else:
+        no_of_bits = len(binary)
+        for i in range(0,no_of_bits):
+            converted = converted + (int(binary[i]))*(2**(no_of_bits-i-1))
+    return converted
+
 def decimal_to_binary(imm):
     binary = ""
     if(imm>=0):
@@ -160,7 +186,7 @@ def decimal_to_binary(imm):
         for i in range(0, len(binary)):
             flipped_binary = flipped_binary + str(1-int(binary[i]))
         binary = flipped_binary
-        binary = str(int(binary) + 1)
+        binary = add_one_to_binary(binary)
     return binary
 
 def binary_sign_extension(binary, max_bits, signed = True):
@@ -174,19 +200,6 @@ def binary_sign_extension(binary, max_bits, signed = True):
     else:
         binary = "0"*bit_to_extend + binary
     return binary
-
-def binary_to_decimal(binary, signed = True):
-    converted = 0
-    if(signed == True):
-        no_of_bits = len(binary)
-        converted = converted + (int(binary[0]))*(-1**(int(binary[0])))*(2**(no_of_bits-1))
-        for i in range(1,no_of_bits):
-            converted = converted + (int(binary[i]))*(2**(no_of_bits-i-1))
-    else:
-        no_of_bits = len(binary)
-        for i in range(0,no_of_bits):
-            converted = converted + (int(binary[i]))*(2**(no_of_bits-i-1))
-    return converted
 
 def binary_to_hexadecimal(binary_string):
     decimal_number = int(binary_string, 2)  # Convert binary to decimal
@@ -373,16 +386,16 @@ def b_type_instruction(line, line_number):
     if(line[17:20] == "001"):
         if(reg1_value != reg2_value):
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
-    if(line[17:20] == "100"):
+    if(line[17:20] == "101"):
         if(reg1_value >= reg2_value):
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
-    if(line[17:20] == "101"):
+    if(line[17:20] == "111"):
         if(binary_to_decimal(decimal_to_binary(reg1_value),signed = False) >= binary_to_decimal(decimal_to_binary(reg2_value),signed = False)):
             pc = pc + binary_to_decimal(imm_binary, signed=True)
-    if(line[17:20] == "110"):
+    if(line[17:20] == "100"):
         if(reg1_value < reg2_value):
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
-    if(line[17:20] == "111"):
+    if(line[17:20] == "110"):
         if(binary_to_decimal(decimal_to_binary(reg1_value),signed = False) < binary_to_decimal(decimal_to_binary(reg2_value),signed = False)):
             pc = pc + binary_to_decimal(binary_sign_extension(imm_binary, 32, signed = True), signed=True)
 
@@ -484,7 +497,6 @@ while(line_number<len(line_list)):
         line_number = int(j_type_instruction(curr_line, line_number))
 
     line_number+=1
-
 
 with open(to_write, "a") as f:
     for line in main_list:
