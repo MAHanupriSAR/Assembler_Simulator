@@ -1,7 +1,7 @@
 import re
-
-to_open = "test5.txt"
-towrite = "binary_file.txt"
+import sys
+to_open=sys.argv[1]
+towrite=sys.argv[2]
 line_number = 0
 flag_of_error = False
 
@@ -386,7 +386,7 @@ with open(to_open) as f:
             la = (list(elements.keys()))[0]
             ln = (list(elements.values()))[0]
             if la in line:
-                line = line.replace(str(la), str((line_num-ln)*4))
+                line = line.replace(str(la), str((ln-line_num)*4))
         text += line
 
 with open(to_open, "w") as f:
