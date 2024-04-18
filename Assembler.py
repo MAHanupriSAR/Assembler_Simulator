@@ -344,7 +344,7 @@ def j_type_instruction(line):
                     print(f"Error generated at line {str(line_number)}")
         else:
                 flag_of_error=True
-                with open('binary_file.txt','w') as f:
+                with open(towrite,'w') as f:
                     f.write("")
                 print(f"Error generated at line {str(line_number)}")
 
@@ -368,6 +368,8 @@ with open(to_open) as f:
     for line in f:
         text1 += line
 
+# or (line[line.index(char) + 1] != " "
+
 line_num=0
 text = ""
 char = ":"
@@ -375,7 +377,7 @@ with open(to_open) as f:
     for line in f:
         line_num+=1
         if(char in line):
-            if((not (is_continuous_alphabets(line[:line.index(char)]))) or (line[line.index(char) + 1] != " ")):
+            if((not (is_continuous_alphabets(line[:line.index(char)])))):
                 with open(towrite, "w") as fh:
                     fh.write("")
                 print(f"Error generated at line {str(line_num)}")
@@ -405,6 +407,7 @@ with open(to_open) as f:
             continue
 
         elif (curr_line==halt):
+            b_type_instruction(curr_line)
             main_list[1] = line_number
             main_list[0] = line_number
         
@@ -438,9 +441,9 @@ with open(to_open) as f:
                 f.write("")
             print(f"Error generated at line {str(line_number)}")
 
-if(flag_of_error==False):
-    with open(towrite, "a") as f:
-        f.write(f"00000000000000000000000001100011")
+# if(flag_of_error==False):
+#     with open(towrite, "a") as f:
+#         f.write(f"00000000000000000000000001100011")
 
 if(flag_of_error==False):
     if(main_list[0]==0):
