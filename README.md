@@ -109,3 +109,9 @@ Example command:
 ```bash
 python3 Simulator.py path/to/machine_code.txt path/to/trace.txt
 ```
+
+## License
+
+This project is licensed under the terms of the [MIT License](LICENSE).
+
+---
