@@ -1,5 +1,10 @@
 import re
 import sys
+
+if len(sys.argv) < 3:
+    print("Usage: python assembler.py <input_file> <output_file>")
+    sys.exit(1)
+
 to_open=sys.argv[1]
 towrite=sys.argv[2]
 line_number = 0

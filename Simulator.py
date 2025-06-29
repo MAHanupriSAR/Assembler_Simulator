@@ -1,5 +1,10 @@
 import math as m
 import sys
+
+if len(sys.argv) < 3:
+    print("Usage: python simulatorr.py <input_file> <output_file>")
+    sys.exit(1)
+
 to_open=sys.argv[1]
 to_write=sys.argv[2]
 # to_open="test5.txt"
@@ -224,15 +229,28 @@ def r_type_instruction(line, line_number):
         add=source_register1+source_register2
         register_values[destination_register] = add
 
+    # elif(func7 == "0100000" and func3 == "000"):
+    #     if(source_register1 == "x0"):
+    #         source_register2 = register_values[source_register2]
+    #         compliment= (m.pow(2,(m.floor(m.log2(source_register2))+1))-1)-source_register2 + 1
+    #         register_values[destination_register] = compliment
+    #     else:
+    #         source_register1 = register_values[source_register1]
+    #         source_register2 = register_values[source_register2]
+    #         sub=source_register1-source_register2
+    #         register_values[destination_register] = sub
     elif(func7 == "0100000" and func3 == "000"):
         if(source_register1 == "x0"):
             source_register2 = register_values[source_register2]
-            compliment= (m.pow(2,(m.floor(m.log2(source_register2))+1))-1)-source_register2 + 1
+            if source_register2 > 0:
+                compliment = (m.pow(2, (m.floor(m.log2(source_register2)) + 1)) - 1) - source_register2 + 1
+            else:
+                compliment = 0  # or handle as needed for your logic
             register_values[destination_register] = compliment
         else:
             source_register1 = register_values[source_register1]
             source_register2 = register_values[source_register2]
-            sub=source_register1-source_register2
+            sub = source_register1 - source_register2
             register_values[destination_register] = sub
 
     elif(func3 == "001"):

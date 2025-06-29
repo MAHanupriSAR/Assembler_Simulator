@@ -1,0 +1,15 @@
+addi s0,zero,10
+lui s0,20
+auipc s1,40
+addi s2,zero,10
+bgeu s0,s1,96
+jal s0,label2
+sw s2,0(s0)
+lw s3,0(s0)
+label2: add s4,s0,s1
+or s5,s0,s1
+bgeu s5,s1,label3
+label3: addi s2,zero,-40
+jal a4,label4
+label4: blt s4,s1,48
+beq zero,zero,0
