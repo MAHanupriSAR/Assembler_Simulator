@@ -508,13 +508,3 @@ Assembler_Simulator/
 ## License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for full terms.
-
-```
-Copyright (c) 2025 MAHanupriSAR
-```
-
----
-
-<div align="center">
-  <sub>Built with ❤️ for Computer Organization · RISC-V RV32I · Python 3</sub>
-</div>
